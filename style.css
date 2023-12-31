@@ -13,7 +13,23 @@ main {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
+}
+
+#apple {
+  width: 2.5vw;
+  height: 2.5vw;
+  background: red;
+  display: inline-block;
+}
+
+#apple-number {
+  color: white;
+  font-size: 2.5vw;
+}
+
+.area-score {
+  text-align: left;
+  display: none;
 }
 
 .area-canvas {
@@ -22,6 +38,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .area-buttons {
@@ -31,8 +48,6 @@ main {
 }
 
 #stage {
-  width: 300px;
-  height: 300px;
   image-rendering: pixelated;
   border: 1px solid #2676ff;
 }
@@ -49,6 +64,94 @@ main {
 .buttons {
   margin: auto;
   text-align: center;
+}
+
+.area-info-game-over {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  display: none;
+  opacity: 0;
+}
+
+.area-info-game-over div {
+  background: black;
+  width: 80%;
+  height: 30%;
+  border: limegreen 10px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#game-over {
+  color: white;
+  font-size: 32pt;
+}
+
+.area-info-game-over p {
+  color: white;
+  font-size: 18pt;
+}
+
+.area-info-game-over #area-buttons {
+  display: block;
+  border: none;
+  text-align: center;
+  width: 100%;
+}
+
+.curtain-info-game-over {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background: black;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.area-info-game-over #area-buttons button {
+  display: inline-block;
+  background: red;
+  border: red 5px solid;
+  color: white;
+  width: 35%;
+  height: 60%;
+}
+
+.turnOff {
+  animation: darken 2s linear forwards;
+}
+
+.turnOn {
+  animation: light-up 2s linear forwards;
+}
+
+@keyframes darken {
+  
+  from {
+    opacity: 1;
+  }
+  
+  to {
+    opacity: 0;
+  }
+  
+}
+
+@keyframes light-up {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .up {

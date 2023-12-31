@@ -2,19 +2,15 @@
 var canvas;
 var ctx;
 
-window.onload = () => {
-  
-  canvas = document.getElementById('stage')
-  ctx = canvas.getContext('2d')
-  
-  setInterval(game, 1000 / 5)
-  
-  addEventListener('keydown', (info) => moveSnake(info.key))
-  
-}
+var loopReference;
+
+var snakeMoving = false;
 
 const squareSize = 4
 const squareQuantity = 25
+
+var appleNumber = 0
+var appleNumberElement
   
 const trail = new Array()
 
@@ -26,7 +22,8 @@ const velocity = {
   x: 0,
   y: 0
 }
-  
+
+// position of the snake head
 const position = {
   x: Math.floor(Math.random() * squareQuantity),
   y: Math.floor(Math.random() * squareQuantity)
@@ -36,8 +33,34 @@ const apple = {
   x: Math.floor(Math.random() * squareQuantity),
   y: Math.floor(Math.random() * squareQuantity)
 }
+
+window.onload = () => {
   
-function game() {
+  canvas = document.getElementById('stage')
+  ctx = canvas.getContext('2d')
+  
+  loopReference = setInterval(loop, 1000 / 5)
+  
+  addEventListener('keydown', moveSnake)
+  
+  if (innerWidth > innerHeight) {
+    canvas.style.width = '75vh'
+    canvas.style.height = '75vh'
+  } else {
+    canvas.style.width = '75vw'
+    canvas.style.height = '75vw'
+  }
+  
+  const areaScore = document.querySelector('.area-score')
+  areaScore.style.width = getComputedStyle(canvas).width
+  areaScore.style.display = 'block'
+  
+  appleNumberElement = document.querySelector('#apple-number')
+  
+}
+
+  
+function loop() {
   
   position.x += velocity.x
   position.y += velocity.y
@@ -59,16 +82,43 @@ function game() {
     
   ctx.fillStyle = 'red'
   ctx.fillRect(apple.x * squareSize, apple.y * squareSize, squareSize, squareSize)
-    
+  
+  appleNumberElement.innerHTML = `&nbsp;= ${ appleNumber }`
+  
   ctx.fillStyle = 'limegreen'
   
   for (const item of trail) {
       
     ctx.fillRect(item.x * squareSize, item.y * squareSize, squareSize, squareSize)
-      
+    
+    if (!snakeMoving) {
+      break
+    }
+    
+    // if snake head position is quals another position of trail
     if (item.x === position.x && item.y === position.y) {
+      
       velocity.x = velocity.y = 0
       tail = 5
+      
+      gameStarted = false
+      clearInterval(loopReference)
+      removeEventListener('keydown', moveSnake)
+      
+      const areaInfoGameOver = document.querySelector('.area-info-game-over')
+      areaInfoGameOver.style.display = 'flex'
+      areaInfoGameOver.classList.add('turnOn')
+      
+      const curtainInfoGameOver = document.querySelector('.curtain-info-game-over')
+      curtainInfoGameOver.style.display = 'block'
+      curtainInfoGameOver.classList.add('turnOn')
+      
+      const buttonYesFromAreaInfoGameOver = document.getElementById('button-yes-area-info-game-over')
+      buttonYesFromAreaInfoGameOver.addEventListener('click', (event) => location.reload())
+
+      const buttonExitFromAreaInfoGameOver = document.getElementById('button-exit-area-info-game-over')
+      buttonExitFromAreaInfoGameOver.addEventListener('click', (event) => close())
+      
     }
       
   }
@@ -85,6 +135,7 @@ function game() {
   if (position.x === apple.x && position.y === apple.y) {
     
     tail++
+    appleNumber++
     
     var activated = false
     var x, y;
@@ -93,6 +144,8 @@ function game() {
       
       x = Math.floor(Math.random() * squareQuantity)
       y = Math.floor(Math.random() * squareQuantity)
+      
+      // check if apple is at trail
       
       inner: for (const item of trail) {
         
@@ -114,35 +167,54 @@ function game() {
     
 }
   
-  
+function moveSnake(event) {
+  moveSnake(event.key)
+}
 
 function moveSnake(key) {
   
   switch (key) {
+    
     case 'ArrowUp':
+      
       if (velocity.y === 0) {
+        snakeMoving = true
         velocity.y = -speed
         velocity.x = 0
       }
+      
       break
+      
     case 'ArrowRight':
+      
       if (velocity.x === 0) {
+        snakeMoving = true
         velocity.x = speed
         velocity.y = 0
       }
+      
       break
+      
     case 'ArrowDown':
+      
       if (velocity.y === 0) {
+        snakeMoving = true
         velocity.y = speed
         velocity.x = 0
       }
+      
       break
+      
     case 'ArrowLeft':
+      
       if (velocity.x === 0) {
+        snakeMoving = true
         velocity.x = -speed
         velocity.y = 0
       }
+      
       break
+      
   }
     
 }
