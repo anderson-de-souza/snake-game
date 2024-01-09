@@ -29,12 +29,12 @@
         
         <div 
           class="button up" 
-          ontouchstart="moveSnake('ArrowUp')"></div>
+          ontouchstart="processKey('ArrowUp')" onclick="processKey('ArrowUp')"></div>
           
         <br>
         <div 
           class="button left" 
-          ontouchstart="moveSnake('ArrowLeft')"></div>
+          ontouchstart="processKey('ArrowLeft')" onclick="processKey('ArrowLeft')"></div>
               
         <div class="button">
           
@@ -42,11 +42,13 @@
         
         <div 
           class="button right" 
-          ontouchstart="moveSnake('ArrowRight')"></div><br>
+          ontouchstart="processKey('ArrowRight')" onclick="processKey('ArrowRight')"></div>
+
+        <br>
           
         <div 
           class="button down" 
-          ontouchstart="moveSnake('ArrowDown')"></div>
+          ontouchstart="processKey('ArrowDown')" onclick="processKey('ArrowDown')"></div>
           
       </div>
       

@@ -1,23 +1,26 @@
+// html elements
+var canvas
+var areaScore
+var appleNumberElement
+var areaInfoGameOver
+var buttonYesFromAreaInfoGameOver
+var buttonExitFromAreaInfoGameOver
 
-var canvas;
-var ctx;
 
-var loopReference;
+// canvas
+var context
 
-var snakeMoving = false;
-
+// screen size scalling
 const squareSize = 4
 const squareQuantity = 25
 
+// game status
+var loopReference
 var appleNumber = 0
-var appleNumberElement
-  
+var snakeMoving = false
 const trail = new Array()
-
 var tail = 5
-  
 const speed = 1
-  
 const velocity = {
   x: 0,
   y: 0
@@ -37,26 +40,38 @@ const apple = {
 window.onload = () => {
   
   canvas = document.getElementById('stage')
-  ctx = canvas.getContext('2d')
+  areaScore = document.querySelector('.area-score')
+  appleNumberElement = document.querySelector('#apple-number')
+  areaInfoGameOver = document.querySelector('.area-info-game-over')
+  curtainInfoGameOver = document.querySelector('.curtain-info-game-over')
+  buttonYesFromAreaInfoGameOver = document.getElementById('button-yes-area-info-game-over')
+  buttonExitFromAreaInfoGameOver = document.getElementById('button-exit-area-info-game-over')
+
+  context = canvas.getContext('2d')
   
   loopReference = setInterval(loop, 1000 / 5)
   
   addEventListener('keydown', moveSnake)
+
+  addEventListener('resize', onResizeScreen)
   
+  onResizeScreen()
+  
+}
+
+function onResizeScreen() {
+
   if (innerWidth > innerHeight) {
-    canvas.style.width = '75vh'
-    canvas.style.height = '75vh'
+    canvas.style.width = '55vh'
+    canvas.style.height = '55vh'
   } else {
-    canvas.style.width = '75vw'
-    canvas.style.height = '75vw'
+    canvas.style.width = '55vw'
+    canvas.style.height = '55vw'
   }
-  
-  const areaScore = document.querySelector('.area-score')
+   
   areaScore.style.width = getComputedStyle(canvas).width
   areaScore.style.display = 'block'
-  
-  appleNumberElement = document.querySelector('#apple-number')
-  
+
 }
 
   
@@ -77,19 +92,19 @@ function loop() {
     position.y = 0
   }
     
-  ctx.fillStyle = 'black'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  context.fillStyle = 'black'
+  context.fillRect(0, 0, canvas.width, canvas.height)
     
-  ctx.fillStyle = 'red'
-  ctx.fillRect(apple.x * squareSize, apple.y * squareSize, squareSize, squareSize)
+  context.fillStyle = 'red'
+  context.fillRect(apple.x * squareSize, apple.y * squareSize, squareSize, squareSize)
   
   appleNumberElement.innerHTML = `&nbsp;= ${ appleNumber }`
   
-  ctx.fillStyle = 'limegreen'
+  context.fillStyle = 'limegreen'
   
   for (const item of trail) {
       
-    ctx.fillRect(item.x * squareSize, item.y * squareSize, squareSize, squareSize)
+    context.fillRect(item.x * squareSize, item.y * squareSize, squareSize, squareSize)
     
     if (!snakeMoving) {
       break
@@ -105,18 +120,13 @@ function loop() {
       clearInterval(loopReference)
       removeEventListener('keydown', moveSnake)
       
-      const areaInfoGameOver = document.querySelector('.area-info-game-over')
       areaInfoGameOver.style.display = 'flex'
       areaInfoGameOver.classList.add('turnOn')
       
-      const curtainInfoGameOver = document.querySelector('.curtain-info-game-over')
       curtainInfoGameOver.style.display = 'block'
       curtainInfoGameOver.classList.add('turnOn')
       
-      const buttonYesFromAreaInfoGameOver = document.getElementById('button-yes-area-info-game-over')
       buttonYesFromAreaInfoGameOver.addEventListener('click', (event) => location.reload())
-
-      const buttonExitFromAreaInfoGameOver = document.getElementById('button-exit-area-info-game-over')
       buttonExitFromAreaInfoGameOver.addEventListener('click', (event) => close())
       
     }
@@ -168,10 +178,10 @@ function loop() {
 }
   
 function moveSnake(event) {
-  moveSnake(event.key)
+  processKey(event.key)
 }
 
-function moveSnake(key) {
+function processKey(key) {
   
   switch (key) {
     
